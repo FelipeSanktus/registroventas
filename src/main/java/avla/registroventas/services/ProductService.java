@@ -58,4 +58,17 @@ public class ProductService {
            throw new ResourceNotFoundException("Resource not found");
        }
     }
+
+    @PutMapping("/user/products/{id}")
+    public Product updateProduct(@RequestBody Product product, @PathVariable Long id) {
+        return productRepository.findById(id)
+                .map(productEdited -> {
+                    productEdited.setStatus(product.getStatus());
+                    ProductHistory history = new ProductHistory(productEdited, Parametros.SOLD_RESOURCE+productEdited.getId());
+                    userProductHistoryRepository.save(history);
+                    return productRepository.save(productEdited);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("ProductId " + id + " not found"));
+    }
+
 }
