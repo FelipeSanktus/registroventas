@@ -1,6 +1,9 @@
 package avla.registroventas.security;
 
+import avla.registroventas.entitys.User;
+import avla.registroventas.repositorys.UserRepository;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import io.jsonwebtoken.Jwts;
@@ -10,8 +13,14 @@ import java.util.Collections;
 
 
 public class JwtUtil {
+
+    @Autowired
+    private static UserRepository userRepository;
+
+
     public static void addAuthentication(HttpServletResponse response, String name, String rol) {
-        String token = Jwts.builder().setSubject(name).signWith(SignatureAlgorithm.HS512,"A@vla").compact();
+        String token = Jwts.builder()
+                .setSubject(name).signWith(SignatureAlgorithm.HS512,"A@vla").compact();
         response.addHeader("Authorization","Bearer "+token);
     }
 

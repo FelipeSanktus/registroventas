@@ -2,6 +2,7 @@ package avla.registroventas.entitys;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -28,6 +29,13 @@ public class User {
 
     @Column(name = "rut")
     private String rut;
+
+    @Column(name = "rol")
+    private String rol;
+
+
+
+
 
     public long getId() {
         return id;
@@ -92,9 +100,5 @@ public class User {
     public void setRol(String rol) {
         this.rol = rol;
     }
-
-    @Column(name = "rol")
-    private String rol;
-
 
 }
