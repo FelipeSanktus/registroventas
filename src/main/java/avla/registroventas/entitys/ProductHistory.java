@@ -60,6 +60,10 @@ public class ProductHistory {
         Date dat = new Date();
         this.publishedDate = new java.sql.Date(dat.getTime());
     }
+
+    public ProductHistory(){
+        super();
+    }
 }
 
 
