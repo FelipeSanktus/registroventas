@@ -56,11 +56,10 @@ public class WebSecurity  extends WebSecurityConfigurerAdapter {
     protected CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
 
-        // NOTE: setAllowCredentials(true) is important,
-        // otherwise, the value of the 'Access-Control-Allow-Origin' header in the response
+        // NOTE: setAllowCredentials(true) is important,er in the response
         // must not be the wildcard '*' when the request's credentials mode is 'include'.
         configuration.setAllowCredentials(true);
 
