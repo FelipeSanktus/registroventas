@@ -100,4 +100,14 @@ public class ProductService {
         }
     }
 
+    @GetMapping("/user/{userid}/sold/items")
+    public List<Product> getAllSoldItemsByUserId(@PathVariable (value = "userid") Long userId) {
+        return  productRepository.findAllByUserIdAndStatusOrderByPrice(userId, 1);
+    }
+
+    @GetMapping("/user/{userid}/lost/items")
+    public List<Product> getAllLostItemsByUserId(@PathVariable (value = "userid") Long userId) {
+        return  productRepository.findAllByUserIdAndStatusOrderByPrice(userId, 2);
+    }
+
 }
