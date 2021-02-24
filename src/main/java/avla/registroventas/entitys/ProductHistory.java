@@ -20,15 +20,16 @@ public class ProductHistory {
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "product_id",nullable = false)
+    @JoinColumn(name = "user_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Product product;
+    private User user;
 
     @Column(name = "publishedDate")
     private Date publishedDate;
 
     @Column(name = "action")
     private String action;
+
 
     public int getId() {
         return id;
@@ -38,12 +39,12 @@ public class ProductHistory {
         this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
+    public User getProduct() {
+        return user;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct(User user) {
+        this.user = user;
     }
 
     public Date getPublishedDate() {
@@ -54,8 +55,24 @@ public class ProductHistory {
         this.publishedDate = publishedDate;
     }
 
-    public ProductHistory(Product product, String action) {
-        this.product = product;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public ProductHistory(User user, String action) {
+        this.user = user;
         this.action = action;
         Date dat = new Date();
         this.publishedDate = new java.sql.Date(dat.getTime());

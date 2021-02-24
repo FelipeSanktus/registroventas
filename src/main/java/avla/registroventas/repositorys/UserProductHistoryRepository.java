@@ -12,8 +12,6 @@ import java.util.Collection;
 
 
 public interface UserProductHistoryRepository extends JpaRepository<ProductHistory,Long> {
-    ArrayList<ProductHistory> findAllByProductId(Long id, Pageable pageable);
-    ArrayList<ProductHistory> findAllByProductId(long id);
-    Collection<ProductHistory> findAllByProduct(Product product);
+    ArrayList<ProductHistory> findAllByUserId(Long id,Pageable pageable);
 
 }

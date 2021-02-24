@@ -14,7 +14,7 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "name")
     private String name;
@@ -84,6 +84,10 @@ public class Product implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Product(){
+        super();
     }
 
 

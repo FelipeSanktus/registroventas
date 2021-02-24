@@ -11,6 +11,8 @@ import avla.registroventas.security.Parametros;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +49,7 @@ public class ProductService {
                 product.setUser(user);
                 product.setStatus(0);
                 Product saveProduct = productRepository.save(product);
-                ProductHistory history = new ProductHistory(product, Parametros.CREATE_RESOURCE+saveProduct.getId());
+                ProductHistory history = new ProductHistory(user, Parametros.CREATE_RESOURCE+saveProduct.getName());
                 userProductHistoryRepository.save(history);
                 return product;
             }
@@ -59,16 +61,29 @@ public class ProductService {
        }
     }
 
-    @PutMapping("/user/products/{id}")
-    public Product updateProduct(@RequestBody Product product, @PathVariable Long id) {
+    @PutMapping("/user/{userid}/products/{id}")
+    public Product updateProduct(@RequestBody Product product, @PathVariable Long userid,@PathVariable Long id) {
+        User user = userRepository.findUserById(userid);
         return productRepository.findById(id)
                 .map(productEdited -> {
                     productEdited.setStatus(product.getStatus());
-                    ProductHistory history = new ProductHistory(productEdited, Parametros.SOLD_RESOURCE+productEdited.getId());
+                    ProductHistory history = new ProductHistory(user, Parametros.SOLD_RESOURCE+productEdited.getName());
                     userProductHistoryRepository.save(history);
                     return productRepository.save(productEdited);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("ProductId " + id + " not found"));
+    }
+
+    @DeleteMapping(value = "/user/products/{id}")
+    public ResponseEntity<Long> deletePost(@PathVariable Long id) {
+        Product deleteProduct = productRepository.findProductById(id);
+        if(deleteProduct != null){
+            productRepository.delete(deleteProduct);
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        }
+        else{
+            throw new ResourceNotFoundException("Product id: "+id+ "Not Found");
+        }
     }
 
 }

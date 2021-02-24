@@ -29,13 +29,7 @@ public class ProductHistoryService {
 
 
     @GetMapping("/user/{id}/history")
-        public Collection<ProductHistory> getUserHistory(@PathVariable(value = "id") Long userId) {
-        List<Product> userProducts = productRepository.findAllProductsByUserId(userId);
-        Collection<ProductHistory> userHistory = new ArrayList<>();
-        for (Product product:userProducts) {
-            Collection<ProductHistory> list = userProductHistoryRepository.findAllByProduct(product);
-            userHistory.addAll(list);
-        }
-        return userHistory;
+        public Collection<ProductHistory> getUserHistory(@PathVariable(value = "id") Long userId, Pageable pageable) {
+        return userProductHistoryRepository.findAllByUserId(userId,pageable);
     }
 }
