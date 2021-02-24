@@ -67,22 +67,36 @@ public class ProductService {
         return productRepository.findById(id)
                 .map(productEdited -> {
                     productEdited.setStatus(product.getStatus());
-                    ProductHistory history = new ProductHistory(user, Parametros.SOLD_RESOURCE+productEdited.getName());
-                    userProductHistoryRepository.save(history);
+                    if(productEdited.getStatus() == 1){
+                        ProductHistory history = new ProductHistory(user, Parametros.SOLD_RESOURCE+productEdited.getName());
+                        userProductHistoryRepository.save(history);
+                    }
+                    else if(productEdited.getStatus() == 2){
+                        ProductHistory history = new ProductHistory(user, Parametros.LOST_RESOURCE+productEdited.getName());
+                        userProductHistoryRepository.save(history);
+                    }
                     return productRepository.save(productEdited);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("ProductId " + id + " not found"));
     }
 
-    @DeleteMapping(value = "/user/products/{id}")
-    public ResponseEntity<Long> deletePost(@PathVariable Long id) {
-        Product deleteProduct = productRepository.findProductById(id);
-        if(deleteProduct != null){
-            productRepository.delete(deleteProduct);
-            return new ResponseEntity<>(id, HttpStatus.OK);
+    @DeleteMapping(value = "/user/{userId}/products/{id}")
+    public ResponseEntity<Long> deletePost(@PathVariable Long id, @PathVariable Long userId) {
+        User user = userRepository.findUserById(userId);
+        if(user != null){
+            Product deleteProduct = productRepository.findProductById(id);
+            if(deleteProduct != null){
+                ProductHistory history = new ProductHistory(user,Parametros.DELETE_RESOURCE+deleteProduct.getName());
+                userProductHistoryRepository.save(history);
+                productRepository.delete(deleteProduct);
+                return new ResponseEntity<>(id, HttpStatus.OK);
+            }
+            else{
+                throw new ResourceNotFoundException("Product id: "+id+ "Not Found");
+            }
         }
         else{
-            throw new ResourceNotFoundException("Product id: "+id+ "Not Found");
+            throw new ResourceNotFoundException("User id: "+userId+ "Not Found");
         }
     }
 
