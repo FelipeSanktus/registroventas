@@ -39,13 +39,6 @@ public class ProductHistory {
         this.id = id;
     }
 
-    public User getProduct() {
-        return user;
-    }
-
-    public void setProduct(User user) {
-        this.user = user;
-    }
 
     public Date getPublishedDate() {
         return publishedDate;

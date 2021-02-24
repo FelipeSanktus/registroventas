@@ -35,6 +35,11 @@ public class ProductService {
         return  productRepository.findByUserId(userId, pageable);
     }
 
+    @GetMapping("/user/{id}/products/all")
+    public List<Product> getAllByUserId(@PathVariable (value = "id") Long userId) {
+        return  productRepository.findAllByUserId(userId);
+    }
+
     @GetMapping("user/resume/products/{status}")
     public List<Product> getAllProductsByUserId(@PathVariable (value = "status") int status) {
         return  productRepository.findAllByStatus(status);
