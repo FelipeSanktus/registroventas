@@ -11,7 +11,6 @@ import javax.swing.text.EditorKit;
 
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RestController
-
 public class UserService {
     @Autowired
     UserRepository userRepository;

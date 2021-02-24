@@ -26,6 +26,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         InputStream body = request.getInputStream();
         Usuario user = new ObjectMapper().readValue(body,Usuario.class);
+        String b = request.getParameter("username");
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword(), Collections.emptyList()));
 
     }
