@@ -26,7 +26,7 @@ public class UsuarioService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         avla.registroventas.entitys.User user = usuarioRepository.findUsuarioByUsername(username);
-        return this.userBulder(user.getUsername(),new BCryptPasswordEncoder().encode(user.getPassword()),user.getRol());
+        return this.userBulder(user.getUsername(),new BCryptPasswordEncoder().encode(user.getPassword()),user.getRol()+" "+user.getId());
     }
 
     public List<GrantedAuthority> buildgrante(String rol){
@@ -53,7 +53,7 @@ public class UsuarioService implements UserDetailsService {
         boolean acountNonLocked = true;
         List<GrantedAuthority> l = new ArrayList();
         for(String rol:roles){
-            l.add(new SimpleGrantedAuthority("ROLE_"+rol));
+            l.add(new SimpleGrantedAuthority(rol));
         }
         return new User(username,password,enabled,acountNonExpired,credentialsNonExpired,acountNonLocked,l);
     }
