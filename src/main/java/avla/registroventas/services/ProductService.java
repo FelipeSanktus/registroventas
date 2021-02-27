@@ -45,6 +45,10 @@ public class ProductService {
         return  productRepository.findAllByStatus(status);
     }
 
+    @GetMapping("/user/{userId}/product/{productId}")
+    public Product getProductById(@PathVariable (value = "userId") Long userId,@PathVariable (value = "productId") Long productId){
+        return productRepository.findProductByIdAndUserId(productId,userId);
+    }
 
     @PostMapping("/user/{id}/products")
     public Product createProduct(@PathVariable (value = "id") Long userId, @RequestBody Product product) {
