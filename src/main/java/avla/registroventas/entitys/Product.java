@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -31,6 +32,17 @@ public class Product implements Serializable {
     //1 para estado vendido
     //2 para estado robado
 
+    @Column(name  = "sale_date")
+    private Date saleDate;
+
+    public Date getSaleDate() {
+        return saleDate;
+    }
+
+    public void setSaleDate() {
+        Date dat = new Date();
+        this.saleDate = new java.sql.Date(dat.getTime());
+    }
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id",nullable = false)

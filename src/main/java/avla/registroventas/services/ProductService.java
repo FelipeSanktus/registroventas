@@ -30,6 +30,7 @@ public class ProductService {
     @Autowired
     private UserRepository userRepository;
 
+
     @GetMapping("/user/{id}/products")
     public Page<Product> getAllProductsByUserId(@PathVariable (value = "id") Long userId, Pageable pageable) {
         return  productRepository.findByUserId(userId, pageable);
@@ -75,6 +76,7 @@ public class ProductService {
         User user = userRepository.findUserById(userid);
         return productRepository.findById(id)
                 .map(productEdited -> {
+                    int flag = 0;
                     if(!productEdited.getName().equals(product.getName())){
                         ProductHistory history = new ProductHistory(user,"Se ha cambiado el nombre del producto "+product.getId()+" de: '"+productEdited.getName()+"' a: '"+product.getName()+"' ");
                         productEdited.setName(product.getName());
@@ -91,15 +93,20 @@ public class ProductService {
                         userProductHistoryRepository.save(history);
                     }
                     if(productEdited.getStatus() != product.getStatus()){
-                        if(productEdited.getStatus() == 1){
+                        if(product.getStatus() == 1){
                             ProductHistory history = new ProductHistory(user, Parametros.SOLD_RESOURCE+productEdited.getName());
                             userProductHistoryRepository.save(history);
+                            flag = 1;
                         }
-                        else if(productEdited.getStatus() == 2){
+                        else if(product.getStatus() == 2){
                             ProductHistory history = new ProductHistory(user, Parametros.LOST_RESOURCE+productEdited.getName());
                             userProductHistoryRepository.save(history);
                         }
+
                         productEdited.setStatus(product.getStatus());
+                    }
+                    if(flag == 1){
+                        productEdited.setSaleDate();
                     }
                     return productRepository.save(productEdited);
                 })
@@ -135,6 +142,9 @@ public class ProductService {
     public List<Product> getAllLostItemsByUserId(@PathVariable (value = "userid") Long userId) {
         return  productRepository.findAllByUserIdAndStatusOrderByPrice(userId, 2);
     }
+
+
+
 
 
 
