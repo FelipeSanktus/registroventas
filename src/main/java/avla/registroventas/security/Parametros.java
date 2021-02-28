@@ -2,6 +2,7 @@ package avla.registroventas.security;
 
 public class Parametros {
 
+    public static String MODIFY_RESOURCE = "Se ha modificado el producto: ";
     public static String CREATE_RESOURCE = "Se ha agregado el producto: ";
     public static String SOLD_RESOURCE = "Se ha vendido el producto: ";
     public static String DELETE_RESOURCE = "Se ha eliminado el producto: ";

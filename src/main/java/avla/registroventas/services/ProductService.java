@@ -75,14 +75,31 @@ public class ProductService {
         User user = userRepository.findUserById(userid);
         return productRepository.findById(id)
                 .map(productEdited -> {
-                    productEdited.setStatus(product.getStatus());
-                    if(productEdited.getStatus() == 1){
-                        ProductHistory history = new ProductHistory(user, Parametros.SOLD_RESOURCE+productEdited.getName());
+                    if(!productEdited.getName().equals(product.getName())){
+                        ProductHistory history = new ProductHistory(user,"Se ha cambiado el nombre del producto "+product.getId()+" de: '"+productEdited.getName()+"' a: '"+product.getName()+"' ");
+                        productEdited.setName(product.getName());
                         userProductHistoryRepository.save(history);
                     }
-                    else if(productEdited.getStatus() == 2){
-                        ProductHistory history = new ProductHistory(user, Parametros.LOST_RESOURCE+productEdited.getName());
+                    if(productEdited.getPrice() != product.getPrice() && productEdited.getStatus() == 0){
+                        ProductHistory history = new ProductHistory(user,"Se ha cambiado el precio del producto "+product.getId()+" de: '"+productEdited.getPrice()+"' a: '"+product.getPrice()+"' ");
+                        productEdited.setPrice(product.getPrice());
                         userProductHistoryRepository.save(history);
+                    }
+                    if(!productEdited.getDescription().equals(product.getDescription())){
+                        ProductHistory history = new ProductHistory(user,"Se ha cambiado la descripción del producto "+product.getId()+" de: '"+productEdited.getDescription()+"' a: '"+product.getDescription()+"' ");
+                        productEdited.setDescription(product.getDescription());
+                        userProductHistoryRepository.save(history);
+                    }
+                    if(productEdited.getStatus() != product.getStatus()){
+                        if(productEdited.getStatus() == 1){
+                            ProductHistory history = new ProductHistory(user, Parametros.SOLD_RESOURCE+productEdited.getName());
+                            userProductHistoryRepository.save(history);
+                        }
+                        else if(productEdited.getStatus() == 2){
+                            ProductHistory history = new ProductHistory(user, Parametros.LOST_RESOURCE+productEdited.getName());
+                            userProductHistoryRepository.save(history);
+                        }
+                        productEdited.setStatus(product.getStatus());
                     }
                     return productRepository.save(productEdited);
                 })
