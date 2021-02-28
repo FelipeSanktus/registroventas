@@ -104,6 +104,7 @@ public class ProductService {
                         else if(product.getStatus() == 2){
                             ProductHistory history = new ProductHistory(user, Parametros.LOST_RESOURCE+productEdited.getName());
                             userProductHistoryRepository.save(history);
+                            flag = 1;
                         }
 
                         productEdited.setStatus(product.getStatus());
