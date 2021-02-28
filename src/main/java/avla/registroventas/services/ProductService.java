@@ -1,6 +1,7 @@
 package avla.registroventas.services;
 
 import avla.registroventas.entitys.Product;
+import avla.registroventas.entitys.SoldResume;
 import avla.registroventas.entitys.User;
 import avla.registroventas.entitys.ProductHistory;
 import avla.registroventas.errors.ResourceNotFoundException;
@@ -11,10 +12,12 @@ import avla.registroventas.security.Parametros;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -134,14 +137,26 @@ public class ProductService {
     }
 
     @GetMapping("/user/{userid}/sold/items")
-    public List<Product> getAllSoldItemsByUserId(@PathVariable (value = "userid") Long userId) {
-        return  productRepository.findAllByUserIdAndStatusOrderByPrice(userId, 1);
+    public SoldResume getAllSoldItemsByUserId(@PathVariable (value = "userid") Long userId) {
+        List<Product> products =  productRepository.findAllByUserIdAndStatusOrderByPrice(userId, 1);
+        SoldResume resume = new SoldResume(products);
+        return resume;
     }
 
     @GetMapping("/user/{userid}/lost/items")
     public List<Product> getAllLostItemsByUserId(@PathVariable (value = "userid") Long userId) {
         return  productRepository.findAllByUserIdAndStatusOrderByPrice(userId, 2);
     }
+
+    @GetMapping("/user/{userid}/sold/items/{date}")
+    public List<Product> getAllByDateSale(@PathVariable (value = "userid") Long userId, @PathVariable(value = "date")  String filter) {
+        if(filter.length() != 8){
+            return null;
+        }
+        String newDate = filter.substring(0,4)+"/"+filter.substring(4,6)+"/"+filter.substring(6);
+        return  productRepository.findAllBySaleDateAndUserId(newDate,userId);
+    }
+
 
 
 

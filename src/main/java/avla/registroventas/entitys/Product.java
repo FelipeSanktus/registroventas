@@ -6,8 +6,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -33,15 +34,19 @@ public class Product implements Serializable {
     //2 para estado robado
 
     @Column(name  = "sale_date")
-    private Date saleDate;
+    private String saleDate;
 
-    public Date getSaleDate() {
+    public String getSaleDate() {
         return saleDate;
     }
 
     public void setSaleDate() {
-        Date dat = new Date();
-        this.saleDate = new java.sql.Date(dat.getTime());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        System.out.println(dateFormat.format(date));
+        this.saleDate = dateFormat.format(date);
+
+
     }
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
