@@ -150,12 +150,15 @@ public class ProductService {
     }
 
     @GetMapping("/user/{userid}/sold/items/{date}")
-    public List<Product> getAllByDateSale(@PathVariable (value = "userid") Long userId, @PathVariable(value = "date")  String filter) {
+    public SoldResume getAllByDateSale(@PathVariable (value = "userid") Long userId, @PathVariable(value = "date")  String filter) {
         if(filter.length() != 8){
             return null;
         }
+
         String newDate = filter.substring(0,4)+"/"+filter.substring(4,6)+"/"+filter.substring(6);
-        return  productRepository.findAllBySaleDateAndUserId(newDate,userId);
+        List<Product> products =  productRepository.findAllBySaleDateAndUserId(newDate,userId);
+        SoldResume soldResume = new SoldResume(products);
+        return soldResume;
     }
 
 
